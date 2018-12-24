@@ -41,4 +41,4 @@ sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
 ```
 ## How it works?
-spLoader.js finds all elements with the attribute ```sp-element``` and extracts all the information needed to retrieve the data, and then it uses JSOM (JavaScript Object Model) to retrieve query for the data, after that, it maps the items fields to the corresponding elements in the repeat template (the element with attribute ```sp-repeat```).
+spLoader.js finds all elements with the attribute ```sp-element``` and extracts all the information needed to retrieve the data, and then it uses JSOM (JavaScript Object Model) to query for the data, after that, it maps all fields from the results to the corresponding elements in the repeat template (the element with attribute ```sp-repeat```).
