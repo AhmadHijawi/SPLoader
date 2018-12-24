@@ -10,12 +10,12 @@ A JQuery plug-in for creating UI components in SharePoint pages without using an
 
 2- Create your HTML Component
 ```
-<div adp-element="" adp-web-url="/" adp-list-title="Pages" adp-item-count="5" adp-order-field="ArticleStartDate" adp-order="desc">
-  <div adp-repeat>
-    <a adp-field="FileRef" adp-attr="href">
-      <img adp-field="PublishingRollupImage" adp-attr="src">
-      <p adp-text="Title"></p>
-      <p adp-text="ArticleStartDate"></p>
+<div sp-element="" sp-web-url="/" sp-list-title="Pages" sp-item-count="5" sp-order-field="ArticleStartDate" sp-order="desc">
+  <div sp-repeat>
+    <a sp-field="FileRef" sp-attr="href">
+      <img sp-field="PublishingRollupImage" sp-attr="src">
+      <p sp-text="Title"></p>
+      <p sp-text="ArticleStartDate"></p>
     </a>
   </div>
 </div>
