@@ -3,12 +3,8 @@ A JQuery plug-in for creating UI components in SharePoint pages without using an
 
 # How to use?
 1- Add references for JQuery and SPLoader.js
-  <head>
-    .......
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="spLoader.js"></script>
-    .......
-  </head>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="spLoader.js"></script>
 
 2- Create your HTML Component
   <div adp-element="" adp-web-url="/" adp-list-title="Pages" adp-item-count="5" adp-order-field="ArticleStartDate" adp-order="desc">
