@@ -1,4 +1,4 @@
-# SPLoader
+# SPLoader.js
 A JQuery plug-in for creating UI components in SharePoint pages without using any server-side or JavaScript code.
 
 ## How to use?
@@ -25,7 +25,7 @@ A JQuery plug-in for creating UI components in SharePoint pages without using an
 
 Thats is! good luck..
 
-## spLoader html properties:
+## spLoader.js html properties:
 ```
 sp-element = no value needed > used on the root element of the component to be loaded on page load
 sp-list-title = "list or library title"
