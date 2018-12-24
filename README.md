@@ -26,7 +26,7 @@ A JQuery plug-in for creating UI components in SharePoint pages without using an
 Thats is! good luck..
 
 ## spLoader html properties:
-
+```
 sp-element = no value needed > used on the root element of the component to be loaded on page load
 sp-list-title = "list or library title"
 sp-web-url = "server relative web url"
@@ -39,3 +39,4 @@ sp-field = "field internal name to map to sp-attr value"
 sp-attr = "html element attributes name to fill with the sp-field value"
 sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
+```
