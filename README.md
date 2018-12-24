@@ -1,11 +1,11 @@
 # SPLoader.js
-A JQuery plug-in for creating UI components in SharePoint pages without using any server-side or JavaScript code.
+A JQuery plug-in for creating UI components in SharePoint 2013+ pages without using any server-side or JavaScript code.
 
 ## How to use?
-1- Add references for JQuery and SPLoader.js
+1- Upload SPLoader.js to your site and add references for JQuery and SPLoader.js
 ```
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-<script src="spLoader.js"></script>
+<script src="/Style Library/JS/spLoader.js"></script>
 ```
 
 2- Create your HTML Component
