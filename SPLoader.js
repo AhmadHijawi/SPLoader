@@ -6,16 +6,14 @@ sp-filter-field = "Boolean field internal name"
 sp-item-count = "10"
 sp-onload = callback to call after the component is loaded
 sp-repeat = no value needed, used on the element that should be repeated for each item in the results
-sp-text = "field internal name to map to inner html of the element"
-sp-field = "field internal name to map to sp-attr value"
-sp-attr = "html element attributes name to fill in sp-field value"
+sp-field = "field internal and attribute name to map the value" eg: <span sp-field="FileRef,src"></span> OR <span sp-field="FileRef,html"></span> to map to inner html
 sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
 */
 
 (function () {		
 	window.spLoader = {
-		spComponents: [],
+		components: [],
 		loadingComponents: 0,
 		componentsLoaded: 0,
 		componentsFailed: 0,
@@ -123,7 +121,7 @@ sp-order-field = "Field Internal Name"
 				spLoader.addLoadingComponent();
 
 				var info = {};
-				spLoader.spComponents[spLoader.spComponents.length] = info;
+				spLoader.components[spLoader.components.length] = info;
 
 				info.element = elem;
 				info.repeatElement = $(elem).find("[sp-repeat]")[0];
@@ -136,21 +134,20 @@ sp-order-field = "Field Internal Name"
 
 				info.fieldInternalNamesCSV = '';
 				info.includedFields = [];
-				info.textFieldElements = [];
-				info.attrFieldElements = [];
+				info.includedFieldsElements = [];
 
 				if (info.orderField === undefined) {
 					info.orderField = "ID";
 				}
 
-				$(info.repeatElement).find("[sp-text]").each(function () {
-					info.includedFields[info.includedFields.length] = $(this).attr("sp-text");
-					info.textFieldElements[info.textFieldElements.length] = this;
-				});
-				
 				$(info.repeatElement).find("[sp-field]").each(function () {
-					info.includedFields[info.includedFields.length] = $(this).attr("sp-field");
-					info.attrFieldElements[info.attrFieldElements.length] = this;
+					var fieldName = $(this).attr("sp-field").split(',')[0];
+					
+					if(info.includedFields.indexOf(fieldName) === -1)
+						info.includedFields[info.includedFields.length] = fieldName;
+					
+					if(info.includedFieldsElements.indexOf(this) === -1)
+						info.includedFieldsElements[info.includedFieldsElements.length] = this;
 				});
 
 				info.fieldInternalNamesCSV = info.includedFields.join(", ");
@@ -164,30 +161,25 @@ sp-order-field = "Field Internal Name"
 						for (i = 0; i < results.length; i++) {
 
 							var newRepeatElement = $(repeatElementTemplate);
-
-							//Fill text values
-							for (j = 0; j < info.textFieldElements.length; j++) {
-								var textFieldName = $(info.textFieldElements[j]).attr("sp-text");
-								var value = results[i].get_item(textFieldName);
-
-								if (value) {
-									$(newRepeatElement).find('[sp-text="' + textFieldName + '"]').html(value.toStringValue());
-								}
-							}
 							
 							//Fill Attributes
-							for (j = 0; j < info.attrFieldElements.length; j++) {
-								var attrFieldName = $(info.attrFieldElements[j]).attr("sp-field");
-								var attributeName = $(info.attrFieldElements[j]).attr("sp-attr");
+							for (j = 0; j < info.includedFieldsElements.length; j++) {
+								var attrFieldName = $(info.includedFieldsElements[j]).attr("sp-field").split(',')[0];
+								var attributeName = $(info.includedFieldsElements[j]).attr("sp-field").split(',')[1];
 								var value = results[i].get_item(attrFieldName)
+								var currentElement = $(newRepeatElement).find('[sp-field="' + attrFieldName + ',' + attributeName + '"]');
 								if (value) {
-									var currentElement = $(newRepeatElement).find('[sp-field="' + attrFieldName + '"]');
-									var currentValue = currentElement.attr(attributeName);
-									if(currentValue){
-										$(newRepeatElement).find('[sp-field="' + attrFieldName + '"]').attr(attributeName, value.toStringValue() + " " + currentValue);
+									if(attributeName === 'html'){
+										currentElement.html(value.toStringValue());
 									}
 									else{
-										$(newRepeatElement).find('[sp-field="' + attrFieldName + '"]').attr(attributeName, value.toStringValue());
+										var currentValue = currentElement.attr(attributeName);
+										if(currentValue){
+											currentElement.attr(attributeName, value.toStringValue() + " " + currentValue);
+										}
+										else{
+											currentElement.attr(attributeName, value.toStringValue());
+										}
 									}
 								}
 							}
@@ -203,7 +195,7 @@ sp-order-field = "Field Internal Name"
 								onload(info);
 							}
 						} catch (e) {
-							console.log("unable to run sp-onload event for spComponents[" + (spComponents.length - 1) + "]");
+							console.log("unable to run sp-onload event for components[" + (spLoader.components.length - 1) + "]");
 						}
 					}
 					$(info.repeatElement).remove();
@@ -219,9 +211,7 @@ sp-order-field = "Field Internal Name"
 						.attr("sp-loaded", "");
 					$(info.element).find("*")
 						.removeAttr("sp-repeat")
-						.removeAttr("sp-text")
 						.removeAttr("sp-field")
-						.removeAttr("sp-attr")
 
 					spLoader.componentLoaded();
 
@@ -237,7 +227,7 @@ sp-order-field = "Field Internal Name"
 				})
 			} catch (e) {
 				spLoader.componentFailed();
-				console.log("spComponents: " + e.message);
+				console.log("components: " + e.message);
 			}
 		},
 		initAll: function(){
