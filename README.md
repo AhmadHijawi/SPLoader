@@ -12,10 +12,10 @@ A JQuery plug-in for creating UI components in SharePoint 2013+ pages without us
 ```
 <div sp-element="" sp-web-url="/" sp-list-title="Pages" sp-item-count="5" sp-order-field="ArticleStartDate" sp-order="desc">
   <div sp-repeat>
-    <a sp-field="FileRef" sp-attr="href">
-      <img sp-field="PublishingRollupImage" sp-attr="src">
-      <p sp-text="Title"></p>
-      <p sp-text="ArticleStartDate"></p>
+    <a sp-field="FileRef,href">
+      <img sp-field="PublishingRollupImage,src">
+      <p sp-field="Title,html"></p>
+      <p sp-field="ArticleStartDate,html"></p>
     </a>
   </div>
 </div>
@@ -34,9 +34,7 @@ sp-filter-field = "Boolean field internal name" > used if you want to filter ite
 sp-item-count = "10" > query limit
 sp-onload = callback to call after the component is loaded
 sp-repeat = no value needed > used on the element that should be repeated for each item in the results
-sp-text = "field internal name to map to inner html of the element"
-sp-field = "field internal name to map to sp-attr value"
-sp-attr = "html element attributes name to fill with the sp-field value"
+sp-field = "field internal and attribute name to map the value" eg: <span sp-field="FileRef,src"></span> OR <span sp-field="FileRef,html"></span> to map to inner html
 sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
 ```
