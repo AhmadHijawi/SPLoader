@@ -6,7 +6,7 @@ sp-filter-field = "Boolean field internal name"
 sp-item-count = "10"
 sp-onload = callback to call after the component is loaded
 sp-repeat = no value needed, used on the element that should be repeated for each item in the results
-sp-field = "field internal and attribute name to map the value" eg: <span sp-field="FileRef,src"></span> OR <span sp-field="FileRef,html"></span> to map to inner html
+sp-bind = "a binding is a pair of field,attribute. you can chain bindings like this 'FieldName1,attr1;FieldName2,attr2;FieldName3,attr3'" eg: <img sp-bind="FileRef,src;Name,title" />. you can use attribute: html to map to inner html
 sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
 */
@@ -140,14 +140,17 @@ sp-order-field = "Field Internal Name"
 					info.orderField = "ID";
 				}
 
-				$(info.repeatElement).find("[sp-field]").each(function () {
-					var fieldName = $(this).attr("sp-field").split(',')[0];
-					
-					if(info.includedFields.indexOf(fieldName) === -1)
-						info.includedFields[info.includedFields.length] = fieldName;
-					
-					if(info.includedFieldsElements.indexOf(this) === -1)
-						info.includedFieldsElements[info.includedFieldsElements.length] = this;
+				$(info.repeatElement).find("[sp-bind]").each(function () {
+					var bindings = $(this).attr("sp-bind").split(';');
+					for(i = 0; i < bindings.length; i++){
+						var fieldName = bindings[i].split(',')[0];
+						
+						if(info.includedFields.indexOf(fieldName) === -1)
+							info.includedFields[info.includedFields.length] = fieldName;
+						
+						if(i === 0 && info.includedFieldsElements.indexOf(this) === -1)
+							info.includedFieldsElements[info.includedFieldsElements.length] = this;
+					}
 				});
 
 				info.fieldInternalNamesCSV = info.includedFields.join(", ");
@@ -164,21 +167,25 @@ sp-order-field = "Field Internal Name"
 							
 							//Fill Attributes
 							for (j = 0; j < info.includedFieldsElements.length; j++) {
-								var attrFieldName = $(info.includedFieldsElements[j]).attr("sp-field").split(',')[0];
-								var attributeName = $(info.includedFieldsElements[j]).attr("sp-field").split(',')[1];
-								var value = results[i].get_item(attrFieldName)
-								var currentElement = $(newRepeatElement).find('[sp-field="' + attrFieldName + ',' + attributeName + '"]');
-								if (value) {
-									if(attributeName === 'html'){
-										currentElement.html(value.toStringValue());
-									}
-									else{
-										var currentValue = currentElement.attr(attributeName);
-										if(currentValue){
-											currentElement.attr(attributeName, value.toStringValue() + " " + currentValue);
+								var spBindValue = $(info.includedFieldsElements[j]).attr("sp-bind");
+								var bindings = spBindValue.split(';');
+								for(k = 0; k < bindings.length; k++){
+									var attrFieldName = bindings[k].split(',')[0];
+									var attributeName = bindings[k].split(',')[1];
+									var value = results[i].get_item(attrFieldName);
+									var currentElement = $(newRepeatElement).find('[sp-bind="' + spBindValue + '"]');
+									if (value) {
+										if(attributeName === 'html'){
+											currentElement.html(value.toStringValue());
 										}
 										else{
-											currentElement.attr(attributeName, value.toStringValue());
+											var currentValue = currentElement.attr(attributeName);
+											if(currentValue && attributeName === 'class'){
+												currentElement.attr(attributeName, value.toStringValue() + " " + currentValue);
+											}
+											else{
+												currentElement.attr(attributeName, value.toStringValue());
+											}
 										}
 									}
 								}
@@ -211,7 +218,7 @@ sp-order-field = "Field Internal Name"
 						.attr("sp-loaded", "");
 					$(info.element).find("*")
 						.removeAttr("sp-repeat")
-						.removeAttr("sp-field")
+						.removeAttr("sp-bind")
 
 					spLoader.componentLoaded();
 
