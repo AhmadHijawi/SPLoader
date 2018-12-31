@@ -12,10 +12,10 @@ A JQuery plug-in for creating UI components in SharePoint 2013+ pages without us
 ```
 <div sp-element="" sp-web-url="/" sp-list-title="Pages" sp-item-count="5" sp-order-field="ArticleStartDate" sp-order="desc">
   <div sp-repeat>
-    <a sp-field="FileRef,href">
-      <img sp-field="PublishingRollupImage,src">
-      <p sp-field="Title,html"></p>
-      <p sp-field="ArticleStartDate,html"></p>
+    <a sp-bind="FileRef,href">
+      <img sp-bind="PublishingRollupImage,src;Title,title">
+      <p sp-bind="Title,html"></p>
+      <p sp-bind="ArticleStartDate,html"></p>
     </a>
   </div>
 </div>
@@ -27,14 +27,14 @@ Thats is! good luck..
 
 ## spLoader.js html properties:
 ```
-sp-element = no value needed > used on the root element of the component to be loaded on page load
-sp-list-title = "list or library title"
-sp-web-url = "server relative web url"
-sp-filter-field = "Boolean field internal name" > used if you want to filter items by a yes/no field like: IsActive
-sp-item-count = "10" > query limit
+sp-element = no value needed, used on the root element of the component to be processed
+sp-list-title = "list title"
+sp-web-url = "/web"
+sp-filter-field = "Boolean field internal name"
+sp-item-count = "10"
 sp-onload = callback to call after the component is loaded
-sp-repeat = no value needed > used on the element that should be repeated for each item in the results
-sp-field = "field internal and attribute name to map the value" eg: <span sp-field="FileRef,src"></span> OR <span sp-field="FileRef,html"></span> to map to inner html
+sp-repeat = no value needed, used on the element that should be repeated for each item in the results
+sp-bind = "a binding is a pair of field,attribute. you can chain bindings like this 'FieldName1,attr1;FieldName2,attr2;FieldName3,attr3'" eg: <img sp-bind="FileRef,src;Name,title" />. you can use attribute: html to map to inner html
 sp-order = "desc" | "asc"
 sp-order-field = "Field Internal Name"
 ```
